@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/data:/data
+    environment:
+      - JWT_SECRET=dev-secret
+      - DB_PATH=/data/trading.db
+    networks:
+      - trading-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://backend:8080
+      - VITE_WS_URL=ws://backend:8080/ws
+    depends_on:
+      - backend
+    networks:
+      - trading-net
+
+networks:
+  trading-net:
+    driver: bridge
