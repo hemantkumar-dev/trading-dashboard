@@ -1,0 +1,38 @@
+# Render deployment configuration for trading-dashboard
+# - Backend: Docker web service (Go) with optional persistent disk for SQLite
+# - Frontend: Static site (Vite build)
+
+# Define a persistent disk for SQLite (optional: Render disks are not free on some plans)
+disks:
+  - name: data
+    sizeGB: 1
+    region: oregon
+
+services:
+  - type: web
+    name: trading-dashboard-backend
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: backend/Dockerfile
+    disk: data
+    envVars:
+      - key: JWT_SECRET
+        value: "dev-secret"
+      - key: DB_PATH
+        value: "/data/trading.db"
+
+# Static site for frontend; Render will run the build command and publish the output directory
+staticSites:
+  - name: trading-dashboard-frontend
+    branch: main
+    buildCommand: |
+      cd frontend
+      npm ci
+      npm run build
+    publishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: "https://trading-dashboard-backend.onrender.com"
+      - key: VITE_WS_URL
+        value: "wss://trading-dashboard-backend.onrender.com/ws"
