@@ -4,8 +4,10 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
+
+# KEEP lockfiles – do NOT ignore these:
+# package-lock.json
+# yarn.lock
 
 # Go build
 *.exe
@@ -15,11 +17,14 @@ yarn.lock
 bin/
 dist/
 
-# Frontend build
+# Ignore the backend binary
+backend/trading-backend
+
+# Frontend build output
 frontend/dist/
 frontend/build/
 
-# Backend data
+# Backend data (SQLite)
 backend/data/
 backend/*.db
 
