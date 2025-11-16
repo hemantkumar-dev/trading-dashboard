@@ -19,8 +19,18 @@ services:
     envVars:
       - key: JWT_SECRET
         value: "dev-secret"
+      # When using managed Postgres below, Render will provide a DATABASE_URL env var.
+      # The backend prefers DB_PATH, but falls back to DATABASE_URL if DB_PATH is empty.
+      # You can remove the following override in production and rely on the managed DB.
       - key: DB_PATH
         value: "/data/trading.db"
+
+databases:
+  - name: trading-dashboard-db
+    engine: postgresql
+    plan: free
+    region: oregon
+    version: "15"
 
 # Static site for frontend; Render will run the build command and publish the output directory
 staticSites:

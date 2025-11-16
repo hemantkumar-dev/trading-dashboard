@@ -16,6 +16,10 @@ func main() {
 	// load env
 	dbPath := os.Getenv("DB_PATH")
 	if dbPath == "" {
+		// prefer DATABASE_URL (commonly provided by managed Postgres services)
+		dbPath = os.Getenv("DATABASE_URL")
+	}
+	if dbPath == "" {
 		dbPath = "./data/trading.db"
 	}
 	jwtSecret := os.Getenv("JWT_SECRET")
