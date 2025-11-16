@@ -1,12 +1,14 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23-alpine AS builder
 WORKDIR /app
 
 COPY go.mod go.sum ./
+
 RUN apk add --no-cache git build-base
 RUN go env -w GOPROXY=https://proxy.golang.org
 RUN go mod download
 
 COPY . .
+
 RUN CGO_ENABLED=0 go build -o /trading-backend ./cmd/server
 
 FROM alpine:latest
